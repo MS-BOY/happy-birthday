@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Gifts 🎁</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:"Poppins",sans-serif;
+  min-height:100vh;
+  background: radial-gradient(circle at top left,#ffe6f2,#ff99cc,#cc66ff);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Floating Hearts */
+.floating{position:absolute;font-size:25px;opacity:0.6;animation:floaty 6s ease-in-out infinite;}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-25px);}}
+.heart1{left:10%; top:20%;}
+.heart2{right:15%; top:35%;}
+.heart3{left:50%; bottom:10%;}
+.heart4{right:40%; top:60%;}
+.heart5{left:30%; top:50%;}
+
+/* Header */
+#userHeader, #authButtons{
+  display:flex;
+  justify-content:flex-end;
+  width:100%;
+  margin-bottom:20px;
+  gap:15px;
+}
+#userHeader span{font-weight:bold;color:#fff; font-size:18px;}
+#userHeader .btn, #authButtons button{
+  font-size:14px; padding:10px 20px; cursor:pointer; border:none; border-radius:10px;
+  background:linear-gradient(90deg,#ff4da6,#ff1a8c); color:white;
+  transition:0.3s;
+}
+#userHeader .btn:hover, #authButtons button:hover{background:linear-gradient(90deg,#ff66b3,#cc33ff);}
+
+/* Gallery */
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+  gap:20px;
+  width:100%;
+  max-width:1200px;
+}
+
+/* Card */
+.card{
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor:pointer;
+}
+.card:hover{transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+.card img{width:100%;height:180px;object-fit:cover;}
+.card-content{padding:15px;color:#fff;display:flex;flex-direction:column;gap:8px;}
+.card-content h3{font-size:18px;color:#ff66b3;font-weight:bold; text-align:center;}
+
+/* Modal */
+.modal{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:1000;
+}
+.modal-content{
+  background:white;padding:25px;border-radius:15px;width:300px;display:flex;flex-direction:column;gap:10px;
+}
+.modal-content h2{text-align:center;color:#ff4da6;}
+.modal-content input{padding:10px;border:1px solid #ccc;border-radius:8px;}
+.modal-content button{padding:10px;border:none;border-radius:8px;background:#ff66b3;color:white;cursor:pointer;}
+.modal-content button:hover{background:#cc33ff;}
+</style>
+</head>
+<body>
+
+<!-- Floating Hearts -->
+<div class="floating heart1">💖</div>
+<div class="floating heart2">💖</div>
+<div class="floating heart3">💖</div>
+<div class="floating heart4">💖</div>
+<div class="floating heart5">💖</div>
+
+<!-- Header -->
+<div id="authButtons">
+  <button id="loginBtn">Login</button>
+  <button id="registerBtn">Register</button>
+</div>
+
+<div id="userHeader" style="display:none;">
+  <span id="welcomeUser"></span>
+  <button class="btn" onclick="window.location.href='upload.php'">Upload</button>
+  <button class="btn" id="logoutBtn">Logout</button>
+</div>
+
+<!-- Gallery -->
+<div class="gallery" id="gallery"></div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button id="loginSubmit">Login</button>
+    <button id="googleLogin">Login with Google</button>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal" id="registerModal">
+  <div class="modal-content">
+    <h2>Register</h2>
+    <input type="text" id="registerName" placeholder="Full Name">
+    <input type="email" id="registerEmail" placeholder="Email">
+    <input type="password" id="registerPassword" placeholder="Password">
+    <button id="registerSubmit">Sign Up</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { 
+  getAuth, onAuthStateChanged, signOut, 
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  updateProfile, GoogleAuthProvider, signInWithPopup 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCAKFNsyN2Xa5Db_eUUixQsMG1s-eyehg8",
+  authDomain: "m-s-socilal-c84j79.firebaseapp.com",
+  projectId: "m-s-socilal-c84j79",
+  storageBucket: "m-s-socilal-c84j79.appspot.com",
+  messagingSenderId: "221654893663",
+  appId: "1:221654893663:web:e9d07d7085a20292bb87ea"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Show/Hide Modals
+const loginModal = document.getElementById("loginModal");
+const registerModal = document.getElementById("registerModal");
+document.getElementById("loginBtn").onclick = ()=> loginModal.style.display="flex";
+document.getElementById("registerBtn").onclick = ()=> registerModal.style.display="flex";
+window.onclick = e => { 
+  if(e.target===loginModal) loginModal.style.display="none"; 
+  if(e.target===registerModal) registerModal.style.display="none"; 
+}
+
+// Register
+document.getElementById("registerSubmit").onclick = async()=>{
+  const name = registerName.value.trim();
+  const email = registerEmail.value.trim();
+  const pass = registerPassword.value.trim();
+  try{
+    const userCred = await createUserWithEmailAndPassword(auth,email,pass);
+    await updateProfile(userCred.user,{displayName:name});
+    alert("Registration successful!");
+    registerModal.style.display="none";
+  }catch(err){alert(err.message);}
+}
+
+// Login
+document.getElementById("loginSubmit").onclick = async()=>{
+  const email = loginEmail.value.trim();
+  const pass = loginPassword.value.trim();
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+    loginModal.style.display="none";
+  }catch(err){alert(err.message);}
+}
+
+// Google Login
+document.getElementById("googleLogin").onclick = async()=>{
+  try{
+    await signInWithPopup(auth,provider);
+    loginModal.style.display="none";
+  }catch(err){alert(err.message);}
+}
+
+// Logout
+document.getElementById("logoutBtn").onclick = async()=>{ await signOut(auth); }
+
+// Auth State
+onAuthStateChanged(auth,user=>{
+  if(user){
+    document.getElementById("authButtons").style.display="none";
+    document.getElementById("userHeader").style.display="flex";
+    document.getElementById("welcomeUser").textContent = "Hi, "+(user.displayName||"User");
+  }else{
+    document.getElementById("authButtons").style.display="flex";
+    document.getElementById("userHeader").style.display="none";
+  }
+});
+
+// ===== Load Birthday Gifts =====
+async function loadGallery(){
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "<p style='color:white;text-align:center;width:100%'>Loading gifts...</p>";
+  try{
+    // Fetch all documents in birthdayGifts collection, ordered by createdAt descending
+    const q = query(collection(db,"birthdayGifts"), orderBy("createdAt","desc"));
+    const snapshot = await getDocs(q);
+    gallery.innerHTML = "";
+    if(snapshot.empty){
+      gallery.innerHTML = "<p style='color:white;text-align:center;width:100%'>No birthday gifts yet 🎁</p>";
+    }
+    snapshot.forEach(docSnap=>{
+      const data = docSnap.data();
+      const docId = docSnap.id;
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${data.coverUrl || 'https://via.placeholder.com/300'}" alt="${data.title}">
+        <div class="card-content">
+          <h3>${data.title || 'Untitled Gift'}</h3>
+        </div>
+      `;
+      // Click to go to preview page with document ID
+      card.onclick = () => {
+        window.location.href = `preview.php?id=${docId}`;
+      };
+      gallery.appendChild(card);
+    });
+  }catch(err){
+    console.error("Error loading gallery:",err);
+    gallery.innerHTML = "<p style='color:red;text-align:center;width:100%'>Error loading gifts!</p>";
+  }
+}
+window.addEventListener("DOMContentLoaded", loadGallery);
+</script>
+</body>
+</html>

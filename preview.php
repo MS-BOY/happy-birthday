@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Birthday Gift 🎁</title>
+
+<!-- Social Media Preview -->
+<meta property="og:title" content="Birthday Gift 🎁" id="og-title">
+<meta property="og:description" content="A special surprise birthday gift made with love 💖" id="og-description">
+<meta property="og:image" content="https://i.ibb.co/Y3WsWJ3/srija-preview.jpg" id="og-image">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Birthday Gift 🎁" id="twitter-title">
+<meta name="twitter:description" content="A special birthday surprise 💝" id="twitter-description">
+<meta name="twitter:image" content="https://i.ibb.co/Y3WsWJ3/srija-preview.jpg" id="twitter-image">
+
+<link rel="icon" href="https://i.ibb.co/Y3WsWJ3/srija-preview.jpg" type="image/png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:"Poppins",sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:white;
+  background:linear-gradient(to bottom right, rgba(10,25,49,0.85), rgba(26,26,128,0.85));
+  background-size:cover;
+  background-position:center;
+  animation:bgMove 12s ease-in-out infinite alternate;
+}
+@keyframes bgMove{0%{background-position:center top;}50%{background-position:center bottom;}100%{background-position:center top;}}
+.gift{position:relative;width:220px;height:160px;perspective:800px;cursor:pointer;animation:float 3s ease-in-out infinite alternate;z-index:5;}
+@keyframes float{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
+.box{position:absolute;bottom:0;width:100%;height:120px;background:linear-gradient(180deg,#ff66b3,#ff3385);border-radius:10px;box-shadow:0 15px 35px rgba(255,0,128,0.4);overflow:hidden;}
+.shine{position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0));transform:skewX(-25deg);animation:shineMove 2s infinite;}
+@keyframes shineMove{0%{left:-75%;}100%{left:125%;}}
+.lid{position:absolute;top:0;left:0;width:100%;height:60px;background:linear-gradient(180deg,#ff99cc,#ff66b3);border-radius:10px;transform-origin:top center;transition:transform 0.6s ease-in-out;z-index:3;}
+.vertical-ribbon{position:absolute;left:50%;top:0;transform:translateX(-50%);width:30px;height:100%;background:linear-gradient(180deg,#ff1f74,#ff66b3);border-radius:8px;z-index:2;}
+.horizontal-ribbon{position:absolute;top:50%;width:100%;height:25px;background:linear-gradient(90deg,#ff1f74,#ff66b3);border-radius:6px;z-index:2;}
+.bow{position:absolute;top:-25px;left:50%;transform:translateX(-50%);width:90px;height:50px;display:flex;justify-content:space-between;}
+.bow span{width:40px;height:40px;background:radial-gradient(circle at top,#ff99cc,#ff3385);border-radius:50% 50% 0 0;box-shadow:0 5px 15px rgba(255,0,128,0.3);}
+.bow span:first-child{transform:rotate(-35deg);}
+.bow span:last-child{transform:rotate(35deg);}
+.letter-page{position:absolute;top:100%;left:50%;transform:translateX(-50%) scale(0.9);opacity:0;width:85%;max-width:520px;background:rgba(255,255,255,0.1);color:#fff;padding:40px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.6);text-align:center;line-height:1.6;backdrop-filter:blur(10px);transition:all 1s ease;z-index:5;}
+.letter-page.show{top:50%;opacity:1;transform:translate(-50%,-50%) scale(1);animation:unfold 1.2s ease forwards;}
+@keyframes unfold{0%{transform:translate(-50%,-50%) scaleY(0.1);opacity:0;}60%{transform:translate(-50%,-50%) scaleY(1.05);opacity:1;}100%{transform:translate(-50%,-50%) scaleY(1);opacity:1;}}
+h1{font-size:30px;color:#ff99cc;margin-bottom:12px;text-shadow:0 2px 10px rgba(255,255,255,0.4);}
+p{font-size:16px;color:#ffe6f7;}
+.signature{margin-top:20px;font-style:italic;color:#ffbde6;}
+img{width:120px;height:120px;border-radius:50%;border:3px solid #ff66b3;box-shadow:0 0 15px rgba(255,100,180,0.4);margin-bottom:20px;}
+.emoji{position:fixed;top:-10px;font-size:30px;animation:fall linear forwards;}
+.text-rain span{position:fixed;top:-10px;font-size:20px;color:#fff3f8;text-shadow:0 0 10px #ff99cc;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="gift" id="gift">
+  <div class="box"><div class="shine"></div></div>
+  <div class="lid"></div>
+  <div class="vertical-ribbon"></div>
+  <div class="horizontal-ribbon"></div>
+  <div class="bow"><span></span><span></span></div>
+</div>
+
+<div class="letter-page" id="letter">
+  <img id="recipient-img" src="" alt="Recipient">
+  <h1 id="letter-title">💌 Dear Friend,</h1>
+  <p id="letter-text">Loading your special message...</p>
+  <div class="signature" id="letter-signature">— Your Friend 💕</div>
+  <audio id="music" src="" preload="auto" loop></audio>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+// Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCAKFNsyN2Xa5Db_eUUixQsMG1s-eyehg8",
+  authDomain: "m-s-socilal-c84j79.firebaseapp.com",
+  projectId: "m-s-socilal-c84j79",
+  storageBucket: "m-s-socilal-c84j79.appspot.com",
+  messagingSenderId: "221654893663",
+  appId: "1:221654893663:web:e9d07d7085a20292bb87ea"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Elements
+const gift = document.getElementById("gift");
+const lid = gift.querySelector(".lid");
+const letter = document.getElementById("letter");
+const recipientImg = document.getElementById("recipient-img");
+const letterTitle = document.getElementById("letter-title");
+const letterText = document.getElementById("letter-text");
+const letterSignature = document.getElementById("letter-signature");
+const music = document.getElementById("music");
+
+// Get gift ID from URL
+const params = new URLSearchParams(window.location.search);
+const giftId = params.get("id");
+
+// Load gift from Firestore
+async function loadGift() {
+  if(!giftId) return alert("No gift selected!");
+  const docRef = doc(db,"birthdayGifts",giftId);
+  const docSnap = await getDoc(docRef);
+  if(docSnap.exists()){
+    const data = docSnap.data();
+    recipientImg.src = data.mainUrl || ""; // fixed field name
+    letterTitle.textContent = `💌 Dear ${data.author || "Friend"}`;
+    letterText.innerHTML = data.description || "Happy Birthday!";
+    letterSignature.textContent = `— ${data.author || "Your Friend 💕"}`;
+    if(data.musicUrl || data.musicUrl === undefined) music.src = data.musicUrl || "";
+    if(data.bgUrl) document.body.style.backgroundImage = `linear-gradient(to bottom right, rgba(10,25,49,0.85), rgba(26,26,128,0.85)), url('${data.bgUrl}')`;
+  } else {
+    alert("Gift not found!");
+  }
+}
+
+window.onload = loadGift;
+
+// Gift click animation
+let emojiInterval, textInterval;
+gift.addEventListener("click", () => {
+  lid.style.transform = "rotateX(110deg)";
+  setTimeout(()=>gift.style.transform="scale(0)",600);
+  setTimeout(()=>{
+    gift.style.display="none";
+    letter.classList.add("show");
+    if(music.src) music.play();
+    startEmojiRain();
+    startTextRain();
+  },1000);
+});
+
+letter.addEventListener("click",()=>{ 
+  stopEmojiRain(); 
+  stopTextRain(); 
+  if(music.src) music.pause();
+});
+
+// Emoji & text rain
+function startEmojiRain(){
+  const emojis=["🎂","🎉","💖","🎈","✨","💝"];
+  emojiInterval=setInterval(()=>{
+    const emoji=document.createElement("div");
+    emoji.className="emoji";
+    emoji.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left=Math.random()*100+"vw";
+    emoji.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(emoji);
+    setTimeout(()=>emoji.remove(),5000);
+  },300);
+}
+function stopEmojiRain(){ 
+  clearInterval(emojiInterval); 
+  document.querySelectorAll(".emoji").forEach(e=>e.remove()); 
+}
+
+function startTextRain(){
+  const textLayer=document.createElement("div");
+  textLayer.className = "text-rain"; 
+  document.body.appendChild(textLayer);
+  textInterval=setInterval(()=>{
+    const span=document.createElement("span");
+    span.textContent="Happy Birthday 🎉";
+    span.style.left=Math.random()*100+"vw";
+    span.style.animationDuration=(3+Math.random()*4)+"s";
+    textLayer.appendChild(span);
+    setTimeout(()=>span.remove(),5000);
+  },400);
+}
+function stopTextRain(){ 
+  clearInterval(textInterval); 
+  document.querySelectorAll(".text-rain").forEach(e=>e.remove()); 
+}
+</script>
+</body>
+</html>

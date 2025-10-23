@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Homepage -->
   <url>
@@ -11,7 +9,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Gallery Page -->
+  <!-- Preview / Gallery Page -->
   <url>
     <loc>https://mswishme.netlify.app/preview.html</loc>
     <lastmod>2025-10-23</lastmod>
@@ -21,7 +19,7 @@
 
   <!-- Gifts Page -->
   <url>
-    <loc>https://happybirthday.com/gifts</loc>
+    <loc>https://mswishme.netlify.app/gifts.html</loc>
     <lastmod>2025-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -29,7 +27,7 @@
 
   <!-- Contact Page -->
   <url>
-    <loc>https://happybirthday.com/contact</loc>
+    <loc>https://mswishme.netlify.app/contact.html</loc>
     <lastmod>2025-10-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

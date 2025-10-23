@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,3 +165,171 @@ document.getElementById("uploadBtn").addEventListener("click", async ()=>{
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Upload 🎁</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Poppins",sans-serif;
+    min-height:100vh;
+    display:flex; justify-content:center; align-items:flex-start;
+    background: linear-gradient(to bottom right,#ff99cc,#cc66ff);
+    padding:20px;
+    color:white;
+  }
+
+  h1{ text-align:center; margin-bottom:20px; }
+
+  form{
+    background: rgba(255,255,255,0.1);
+    padding:30px;
+    border-radius:20px;
+    width:100%;
+    max-width:500px;
+    backdrop-filter: blur(12px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  input[type="text"], input[type="file"], input[type="number"], textarea{
+    width:100%; padding:12px; margin:10px 0; border:none; border-radius:10px;
+    outline:none; font-size:15px;
+  }
+
+  textarea{resize:none; height:80px;}
+
+  .btn{
+    padding:15px 30px; border:none; border-radius:12px;
+    background:linear-gradient(90deg,#ff4da6,#ff1a8c);
+    color:white; font-weight:bold; font-size:16px;
+    cursor:pointer; margin-top:10px; width:100%;
+    transition:all 0.3s ease;
+  }
+  .btn:hover{transform:scale(1.05); background:linear-gradient(90deg,#ff66b3,#cc33ff);}
+  
+  #status{margin-top:10px; text-align:center;}
+  #progressBar{width:0%; height:5px; background:#fff; border-radius:5px; margin-top:5px;}
+</style>
+</head>
+<body>
+
+<form id="uploadForm">
+  <h1>🎁 Upload Birthday Assets</h1>
+  <input type="text" id="title" placeholder="Gift Title">
+  <input type="text" id="author" placeholder="Uploader Name">
+  <textarea id="description" placeholder="Description"></textarea>
+  
+  <label>Cover Image:</label>
+  <input type="file" id="coverInput" accept="image/*">
+  
+  <label>Main Image:</label>
+  <input type="file" id="mainImageInput" accept="image/*">
+  
+  <label>Background Image:</label>
+  <input type="file" id="bgInput" accept="image/*">
+
+  <label>Birthday Music:</label>
+  <input type="file" id="musicInput" accept="audio/*">
+  
+  <button type="button" class="btn" id="uploadBtn">Upload</button>
+  <div id="status"></div>
+  <div id="progressBar"></div>
+</form>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+// Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCAKFNsyN2Xa5Db_eUUixQsMG1s-eyehg8",
+  authDomain: "m-s-socilal-c84j79.firebaseapp.com",
+  projectId: "m-s-socilal-c84j79",
+  storageBucket: "m-s-socilal-c84j79.appspot.com",
+  messagingSenderId: "221654893663",
+  appId: "1:221654893663:web:e9d07d7085a20292bb87ea"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Cloudinary
+const CLOUD_NAME = 'msboy';
+const UPLOAD_PRESET_IMAGE = 'birthday_image'; // match Cloudinary preset name
+const UPLOAD_PRESET_AUDIO = 'birthday_audio'; // match Cloudinary preset name
+
+const CLOUDINARY_IMAGE_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+const CLOUDINARY_RAW_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`;
+
+const form = document.getElementById("uploadForm");
+const statusEl = document.getElementById("status");
+const progressBar = document.getElementById("progressBar");
+
+async function uploadFile(file, isAudio=false){
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("upload_preset", isAudio?UPLOAD_PRESET_AUDIO:UPLOAD_PRESET_IMAGE);
+  if(isAudio) fd.append("resource_type","raw");
+  const url = isAudio?CLOUDINARY_RAW_URL:CLOUDINARY_IMAGE_URL;
+  const res = await fetch(url,{method:'POST', body:fd});
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.error?.message || res.statusText);
+  return data.secure_url;
+}
+
+document.getElementById("uploadBtn").addEventListener("click", async ()=>{
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const cover = document.getElementById("coverInput").files[0];
+  const mainImage = document.getElementById("mainImageInput").files[0];
+  const bgImage = document.getElementById("bgInput").files[0];
+  const music = document.getElementById("musicInput").files[0];
+
+  if(!title||!author||!description||!cover||!mainImage||!bgImage||!music){
+    alert("Fill all fields & select all files!");
+    return;
+  }
+
+  statusEl.textContent = "Uploading cover...";
+  progressBar.style.width="10%";
+
+  try{
+    const coverUrl = await uploadFile(cover);
+    progressBar.style.width="30%";
+    statusEl.textContent = "Uploading main image...";
+    const mainUrl = await uploadFile(mainImage);
+    progressBar.style.width="50%";
+    statusEl.textContent = "Uploading background...";
+    const bgUrl = await uploadFile(bgImage);
+    progressBar.style.width="70%";
+    statusEl.textContent = "Uploading music...";
+    const musicUrl = await uploadFile(music,true);
+    progressBar.style.width="90%";
+
+    statusEl.textContent = "Saving metadata...";
+    await addDoc(collection(db,"birthdayGifts"),{
+      title, author, description,
+      coverUrl, mainUrl, bgUrl, musicUrl,
+      createdAt: serverTimestamp()
+    });
+
+    statusEl.textContent = "Upload complete! 🎉";
+    progressBar.style.width="100%";
+    form.reset();
+    setTimeout(()=>progressBar.style.width="0%",2000);
+  }catch(err){
+    console.error(err);
+    statusEl.textContent = "Error: "+(err.message||"Unknown");
+  }
+});
+</script>
+
+</body>
+</html>
+>>>>>>> 1b5378770ac250c811b3fbafbd2727fe992d1727

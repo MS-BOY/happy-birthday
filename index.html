@@ -25,8 +25,6 @@
 <meta property="og:title" content="🎂 Happy Birthday Wishes | MS Nonstop 🎉" />
 <meta property="og:description" content="Send and explore beautiful birthday wishes made with love 💕. Celebrate your special moments with MS Nonstop." />
 <meta property="og:image" content="https://cdn.pixabay.com/photo/2017/08/06/09/53/birthday-2595751_960_720.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
 
 <!-- 🐦 Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -36,28 +34,11 @@
 <meta name="twitter:description" content="Celebrate a special birthday with love, joy, and unforgettable surprises 🎈." />
 <meta name="twitter:image" content="https://cdn.pixabay.com/photo/2017/08/06/09/53/birthday-2595751_960_720.png" />
 
-<!-- 🧩 Structured Data (JSON-LD) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "MS Nonstop",
-  "url": "https://mswishme.netlify.app/",
-  "description": "Explore creative and heartfelt birthday wishes, made with love by MS Nonstop.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://mswishme.netlify.app/?s={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
 <!-- 🌈 Favicon -->
 <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4151/4151069.png" />
 
-<!-- 🧠 Fonts & Icons -->
+<!-- 🧠 Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
-
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -101,6 +82,22 @@ nav ul li a:hover{color:#ffe6f9;text-shadow:0 0 10px #fff;}
   font-weight:600;
   text-shadow:0 2px 5px rgba(0,0,0,0.4);
   font-size:14px;
+}
+
+/* 🎁 Upload Button Style */
+#uploadBtn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #33ccff, #3366ff);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+#uploadBtn:hover {
+  background: linear-gradient(90deg, #3399ff, #6633ff);
+  transform: scale(1.05);
 }
 
 /* ===== Hero Section ===== */
@@ -157,7 +154,7 @@ section#wishes{
 .wish-card h3{margin-top:10px;font-size:20px;color:#ffe6f9;}
 .wish-card p{font-size:15px;margin-top:5px;}
 
-/* ===== Floating Decorations ===== */
+/* ===== Floating Emojis ===== */
 .floating{
   position:absolute;font-size:30px;opacity:0.7;
   animation:floaty 8s ease-in-out infinite;
@@ -211,6 +208,7 @@ footer{
   </ul>
   <div class="auth-btns">
     <span id="userDisplay"></span>
+    <button id="uploadBtn">🎁 Upload</button>
     <button id="loginBtn">Login</button>
     <button id="registerBtn">Register</button>
     <button id="logoutBtn" style="display:none;">Logout</button>
@@ -366,7 +364,6 @@ async function loadWishes() {
         <img src="${data.coverUrl || 'https://via.placeholder.com/300'}" alt="${data.title || ''}">
         <h3>${data.title || "Untitled Wish"}</h3>
         <p>${data.description || "A lovely surprise!"}</p>`;
-      // FIXED: use proper template literal here (no escaping)
       card.onclick = () => window.location.href = `preview.html?id=${id}`;
       grid.appendChild(card);
     });
@@ -377,7 +374,11 @@ async function loadWishes() {
 }
 
 window.addEventListener("DOMContentLoaded", loadWishes);
+
+// ===== Upload Button =====
+document.getElementById("uploadBtn").onclick = () => {
+  window.location.href = "upload.html"; // তোমার Upload পেজে পাঠাবে
+};
 </script>
 </body>
 </html>
-

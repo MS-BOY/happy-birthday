@@ -1,184 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎂 Birthday Wishes</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      background: #f8f9fa;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #4b6cb7;
-      background: linear-gradient(90deg, #182848, #4b6cb7);
-      color: white;
-      padding: 10px 20px;
-    }
+<title>🎂 Happy Birthday Wishes | MS Nonstop 🎉</title>
+<meta name="description" content="Celebrate birthdays with love, creativity, and joy! 💖 Explore personalized wishes, heartfelt messages, and surprise greetings by MS Nonstop." />
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
 
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 20px;
-      margin: 0;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:"Poppins",sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#ffb6c1,#ff66b3,#cc66ff);
+  background-size:400% 400%;
+  animation:gradientMove 8s ease infinite;
+  overflow-x:hidden;
+}
+@keyframes gradientMove {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      transition: 0.3s;
-    }
+nav{
+  position:fixed;top:0;left:0;width:100%;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 20px;z-index:100;
+  box-shadow:0 4px 30px rgba(0,0,0,0.2);
+}
+nav .logo{font-size:20px;color:#fff;font-weight:700;text-shadow:0 2px 10px rgba(255,255,255,0.5);}
+nav ul{display:flex;gap:20px;}
+nav ul li{list-style:none;}
+nav ul li a{color:white;text-decoration:none;font-weight:500;font-size:16px;transition:0.3s;}
+nav ul li a:hover{color:#ffe6f9;text-shadow:0 0 10px #fff;}
+.auth-btns{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.auth-btns button{
+  padding:6px 14px;border:none;border-radius:8px;
+  cursor:pointer;font-size:14px;
+  transition:0.3s;
+}
+#loginBtn{background:#00c853;color:white;}
+#registerBtn{background:#2962ff;color:white;}
+#logoutBtn{background:#ff1744;color:white;display:none;}
+#uploadBtn{
+  display:none;
+  background:linear-gradient(90deg,#33ccff,#3366ff);
+  color:white;
+}
+#uploadBtn:hover{background:linear-gradient(90deg,#3399ff,#6633ff);transform:scale(1.05);}
+#userDisplay{color:white;font-weight:600;text-shadow:0 2px 5px rgba(0,0,0,0.4);font-size:14px;}
 
-    nav ul li a:hover {
-      color: #ffd700;
-    }
+/* Hero */
+.hero{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;height:100vh;padding:100px 20px 60px;color:white;position:relative;
+  background:url('birthday.jpg') center/cover no-repeat;
+}
+.hero::after{
+  content:"";position:absolute;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.4);z-index:0;
+}
+.hero h1, .hero p{position:relative;z-index:1;}
+.hero h1{font-size:60px;font-weight:700;text-shadow:0 10px 30px rgba(0,0,0,0.4);animation:floatText 3s ease-in-out infinite;}
+@keyframes floatText{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.hero p{font-size:20px;margin-top:15px;max-width:600px;}
 
-    .auth-btns button {
-      margin-left: 8px;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: 0.3s;
-    }
+/* Wishes */
+section#wishes{
+  padding:80px 20px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);
+  color:#fff;text-align:center;
+}
+#wishes h2{font-size:35px;margin-bottom:30px;color:#ffe6f2;text-shadow:0 0 15px rgba(255,255,255,0.4);}
+.wish-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;max-width:1100px;margin:0 auto;}
+.wish-card{background:rgba(255,255,255,0.2);border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);backdrop-filter:blur(8px);transition:transform 0.3s;cursor:pointer;}
+.wish-card:hover{transform:translateY(-10px) scale(1.05);}
+.wish-card img{width:100%;border-radius:15px;height:180px;object-fit:cover;}
+.wish-card h3{margin-top:10px;font-size:20px;color:#ffe6f9;}
+.wish-card p{font-size:15px;margin-top:5px;}
 
-    #loginBtn {
-      background: #00c853;
-      color: white;
-    }
-
-    #registerBtn {
-      background: #2962ff;
-      color: white;
-    }
-
-    #logoutBtn {
-      background: #ff1744;
-      color: white;
-    }
-
-    #uploadBtn {
-      background: linear-gradient(90deg, #33ccff, #3366ff);
-      color: white;
-    }
-
-    #uploadBtn:hover {
-      background: linear-gradient(90deg, #3399ff, #6633ff);
-      transform: scale(1.05);
-    }
-
-    section {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    #userDisplay {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-  </style>
+footer{text-align:center;padding:30px;background:rgba(255,255,255,0.15);color:white;font-size:14px;}
+@media(max-width:600px){.hero h1{font-size:42px;}.hero p{font-size:18px;}nav ul{display:none;}.auth-btns button{padding:6px 10px;font-size:13px;}}
+</style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav>
-    <div class="logo">🎂 Birthday Wishes</div>
-    <ul>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#wishes">Wishes</a></li>
-    </ul>
-    <div class="auth-btns">
-      <span id="userDisplay"></span>
-      <button id="uploadBtn" style="display: none;">🎁 Upload</button>
-      <button id="loginBtn">Login</button>
-      <button id="registerBtn">Register</button>
-      <button id="logoutBtn" style="display:none;">Logout</button>
-    </div>
-  </nav>
 
-  <section id="home">
-    <h1>Welcome to Birthday Wishes 🎉</h1>
-    <p>Share and create beautiful birthday messages for your loved ones!</p>
-  </section>
+<!-- Navbar -->
+<nav>
+  <div class="logo">🎂 Birthday Wishes</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#wishes">Wishes</a></li>
+  </ul>
+  <div class="auth-btns">
+    <span id="userDisplay"></span>
+    <button id="uploadBtn">🎁 Upload</button>
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
+    <button id="logoutBtn">Logout</button>
+  </div>
+</nav>
 
-  <script type="module">
-    // Firebase Import (v9)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { 
-      getAuth, 
-      onAuthStateChanged, 
-      signInWithPopup, 
-      GoogleAuthProvider, 
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+<!-- Hero -->
+<section id="home" class="hero">
+  <h1>Happy Birthday 💖</h1>
+  <p>May your day be filled with laughter, love, and unforgettable surprises! 🎉</p>
+</section>
 
-    // Your Firebase Config (replace with yours)
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MSG_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+<!-- Wishes Section -->
+<section id="wishes">
+  <h2>🎁 Birthday Wishes Gallery 🎁</h2>
+  <div class="wish-grid" id="wishGrid">
+    <p style="width:100%;color:white;">Loading wishes...</p>
+  </div>
+</section>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+<footer>Made with 💕 by MS Nonstop | © 2025</footer>
 
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const registerBtn = document.getElementById("registerBtn");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const userDisplay = document.getElementById("userDisplay");
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { 
+  getAuth, onAuthStateChanged, signOut, 
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  updateProfile, GoogleAuthProvider, signInWithPopup 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    // Login
-    loginBtn.onclick = async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        alert("Login failed: " + error.message);
-      }
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyCAKFNsyN2Xa5Db_eUUixQsMG1s-eyehg8",
+  authDomain: "m-s-socilal-c84j79.firebaseapp.com",
+  projectId: "m-s-socilal-c84j79",
+  storageBucket: "m-s-socilal-c84j79.appspot.com",
+  messagingSenderId: "221654893663",
+  appId: "1:221654893663:web:e9d07d7085a20292bb87ea"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-    // Logout
-    logoutBtn.onclick = async () => {
-      await signOut(auth);
-    };
+// DOM
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const uploadBtn = document.getElementById("uploadBtn");
+const userDisplay = document.getElementById("userDisplay");
 
-    // Upload Button
-    uploadBtn.onclick = () => {
-      window.location.href = "upload.html";
-    };
+// Dummy modal logic for simplicity
+loginBtn.onclick = async () => { try { await signInWithPopup(auth, provider); } catch(e){ alert(e.message); }};
+logoutBtn.onclick = async () => { await signOut(auth); };
+uploadBtn.onclick = () => { window.location.href="upload.html"; };
 
-    // Auth State Observer
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userDisplay.textContent = "Hi, " + user.displayName + "!";
-        loginBtn.style.display = "none";
-        registerBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
-        uploadBtn.style.display = "inline-block";
-      } else {
-        userDisplay.textContent = "";
-        loginBtn.style.display = "inline-block";
-        registerBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-        uploadBtn.style.display = "none";
-      }
+// Auth state
+onAuthStateChanged(auth, user => {
+  if(user){
+    userDisplay.textContent = `Hi, ${user.displayName || user.email.split("@")[0]}!`;
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+    uploadBtn.style.display = "inline-block";
+  } else {
+    userDisplay.textContent = "";
+    loginBtn.style.display = "inline-block";
+    registerBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
+    uploadBtn.style.display = "none";
+  }
+});
+
+// Load wishes from Firestore
+async function loadWishes() {
+  const grid = document.getElementById("wishGrid");
+  grid.innerHTML = "<p style='width:100%;color:white;'>Loading wishes...</p>";
+  try {
+    const q = query(collection(db,"birthdayGifts"), orderBy("createdAt","desc"));
+    const snapshot = await getDocs(q);
+    grid.innerHTML = "";
+    if(snapshot.empty) grid.innerHTML = "<p style='width:100%;color:white;'>No wishes yet 🎈</p>";
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const card = document.createElement("div");
+      card.className = "wish-card";
+      card.innerHTML = `<img src="${data.coverUrl||'https://via.placeholder.com/300'}" alt="${data.title||''}">
+                        <h3>${data.title||'Untitled Wish'}</h3>
+                        <p>${data.description||'A lovely surprise!'}</p>`;
+      card.onclick = () => window.location.href = `preview.html?id=${docSnap.id}`;
+      grid.appendChild(card);
     });
-  </script>
+  } catch(e){ console.error(e); grid.innerHTML="<p style='width:100%;color:red;'>Failed to load wishes 😢</p>"; }
+}
+
+window.addEventListener("DOMContentLoaded", loadWishes);
+</script>
 </body>
 </html>
